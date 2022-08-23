@@ -1,5 +1,4 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack")
 
@@ -7,13 +6,12 @@ const mode = process.env.NODE_ENV || "development";
 const prod = mode === "production";
 
 module.exports = {
-  // ignoreWarnings: [
-  //   {
-  //     module: /node_modules[\\/]svelte-?/,
-  //   },
-  //   (warning, compilation) => true
-  // ],
-  target: 'web',
+  ignoreWarnings: [
+    {
+      module: /node_modules[\\/]svelte-?/, // With Routify 3 I had to add this because svelte compiler warnings were taking over my render in devServer. See error-svelte-compiler.png in root folder.
+    },
+    (warning, compilation) => true
+  ],
   entry: {
     bundle: ["./src/main.js"],
   },
@@ -28,20 +26,22 @@ module.exports = {
     path: __dirname + "/public",
     filename: "[name].js",
     chunkFilename: "[name].[id].js",
-    publicPath: "http://localhost:8081/",
   },
   module: {
     rules: [
-      // {
-      //   test: /\.m?js/,
-      //   type: "javascript/auto",
-      // },
-      // {
-      //   test: /\.m?js/,
-      //   resolve: {
-      //     fullySpecified: false,
-      //   }
-      // },
+      // begin new rules for Routify 3 -
+      // for Routify 3 I must add these rules due to scroll.js and strict modules error. See the error-strict-module-scroll.js.png in root folder.
+      {
+        test: /\.m?js/,
+        type: "javascript/auto",
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        }
+      },
+      // end of new rules for Routify 3
       {
         test: /\.svelte$/,
         use: {
@@ -70,9 +70,11 @@ module.exports = {
     headers: {
       "Access-Control-Allow-Origin": "*"
     },
-    // historyApiFallback: { 
-    //   index: 'index.html' // needed for direct navigation only
-    // }
+    historyApiFallback: { 
+      // in Routify 3 routing doesn't work at all. I get a 404 served from Webpack (not a Routify 404). 
+      // If I add this fallback option, it does work, although it does a full page reload for every navigation. 
+      index: 'index.html' 
+    }
   },
   mode,
   plugins: [
@@ -82,9 +84,6 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
-    }),
-    new HtmlWebPackPlugin({
-      template: "./src/index.html",
     }),
   ],
   devtool: prod ? false : "source-map",
