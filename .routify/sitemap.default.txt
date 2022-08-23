@@ -2,3 +2,4 @@
 /index
 /more
 /stuff
+/sushi

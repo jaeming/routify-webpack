@@ -5,14 +5,14 @@ export default {
   "id": "_default",
   "_regex": {},
   "_paramKeys": {},
-  "module": false,
   "file": {
-    "path": "src/routes",
-    "dir": "src",
-    "base": "routes",
-    "ext": "",
-    "name": "routes"
+    "path": "src/routes/_module.svelte",
+    "dir": "src/routes",
+    "base": "_module.svelte",
+    "ext": ".svelte",
+    "name": "_module"
   },
+  "asyncModule": () => import('./../src/routes/_module.svelte'),
   "rootName": "default",
   "routifyDir": import.meta.url,
   "children": [
@@ -62,6 +62,22 @@ export default {
         "name": "stuff"
       },
       "asyncModule": () => import('./../src/routes/stuff.svelte'),
+      "children": []
+    },
+    {
+      "meta": {},
+      "id": "_default_sushi_svelte",
+      "_regex": {},
+      "_paramKeys": {},
+      "name": "sushi",
+      "file": {
+        "path": "src/routes/sushi.svelte",
+        "dir": "src/routes",
+        "base": "sushi.svelte",
+        "ext": ".svelte",
+        "name": "sushi"
+      },
+      "asyncModule": () => import('./../src/routes/sushi.svelte'),
       "children": []
     },
     {

@@ -1,1 +1,5 @@
 node_modules
+.routify
+public/bundle/
+public/bundle*
+public/src*
